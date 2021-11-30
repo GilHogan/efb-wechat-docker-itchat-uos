@@ -1,0 +1,14 @@
+# [Bot Token]
+token: "token"
+
+# [List of Admin User IDs]
+admins:
+- 65536
+
+# [Experimental Flags]
+flags:
+    send_image_as_file: true
+    animated_stickers: true
+
+# [Network Configurations]
+request_kwargs:

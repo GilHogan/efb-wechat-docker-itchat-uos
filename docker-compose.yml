@@ -1,0 +1,19 @@
+version: '3'
+services:
+  efb-wechat:
+    image: thehaukeng/efb-wechat # or use ghcr.io/haukeng/efb-wechat if you hate Docker Hub.
+    container_name: efb-wechat
+    restart: unless-stopped
+    environment:
+      - BOT_TOKEN=example_bot_token # Required
+      - BOT_ADMIN=example_bot_admin # Required
+      # - PROXY_URL=http://example.com:1080 # Optional, need when your internet can not connect to Telegram.
+      # - PROXY_USER=user # Optional, need when your proxy need authentication.
+      # - PROXY_PASS=password # Optional, need when your proxy need authentication.
+      # - MP_GROUP_ID=-65536 # Optional, forward every public account message to specific group.
+    volumes:
+      - etm-data:/home/efb/efb_config/profiles/default/blueset.telegram
+      - efb-patch-data:/home/efb/efb_config/profiles/default/patch.PatchMiddleware
+volumes:
+  etm-data:
+  efb-patch-data:

@@ -1,0 +1,6 @@
+# The name of master channel
+master: 'blueset.telegram'
+
+# The max number of message the middleware would show you. 
+# Set it to 0 for no limitation.
+max_num: 15
