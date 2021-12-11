@@ -25,8 +25,7 @@ WORKDIR /home/efb
 COPY --from=builder --chown=efb:efb /home/efb/.local /home/efb/.local
 COPY --chown=efb:efb . /home/efb
 
-ENV PATH=/home/efb/.local/bin:$PATH
-ENV EFB_DATA_PATH  /home/efb/efb_config
-ENV ETM_CONFIG ${EFB_DATA_PATH}/profiles/default/blueset.telegram/config.yaml
+ENV PATH=/home/efb/.local/bin:${PATH}
+ENV EFB_DATA_PATH=/home/efb/efb_config
 
 ENTRYPOINT ["sh", "start.sh"]

@@ -4,18 +4,6 @@ from re import fullmatch
 from ruamel.yaml import YAML
 
 
-def get_file_path():
-    if environ.get("ETM_CONFIG") is None:
-        print("The environment variable ETM_CONFIG must be set!")
-        exit(1)
-    elif fullmatch("^\/(?:[^/]+\/)*[^/]+$", environ.get("ETM_CONFIG")) is None:
-        print("The ETM config file path format isn't validated.")
-        exit(1)
-    else:
-        print("The ETM config file path format is validated.")
-        return environ.get("ETM_CONFIG")
-
-
 def get_bot_config():
     if environ.get("BOT_TOKEN") is None:
         print("The environment variable BOT_TOKEN must be set!")
@@ -102,7 +90,7 @@ def get_mp_telegram_group_id():
 
 
 def main():
-    file_path = get_file_path()
+    file_path = "/home/efb/efb_config/profiles/default/blueset.telegram/config.yaml"
     bot_config = get_bot_config()
     proxy_config = get_proxy_config()
     mp_telegram_group_id = get_mp_telegram_group_id()
@@ -119,7 +107,7 @@ def main():
 
     if "tg_mp" in config and mp_telegram_group_id >= 0:
         del config["tg_mp"]
-    else:
+    elif mp_telegram_group_id < 0:
         config["tg_mp"] = mp_telegram_group_id
 
     with open(file_path, "w") as fw:
