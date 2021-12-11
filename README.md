@@ -43,16 +43,14 @@ Get your Telegram ID (**Not username**) from [@getidsbot](https://t.me/getidsbot
 
 ```shell
 # Create volumes
-docker volume create efb-patch-data
-docker volume create etm-data
+docker volume create efb-wechat-data
 
 # Run 
 docker run -d -t \
 --name "efb-wechat" \
 -e BOT_TOKEN=xxxx \
 -e BOT_ADMIN=xxxx \
--v etm-data:/home/efb/efb_config/profiles/default/blueset.telegram \
--v efb-patch-data:/home/efb/efb_config/profiles/default/patch.PatchMiddleware \
+-v efb-wechat-data:/home/efb/efb_config/profiles/default \
 thehaukeng/efb-wechat
 ```
 
