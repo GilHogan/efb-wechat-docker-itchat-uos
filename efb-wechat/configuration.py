@@ -1,118 +1,220 @@
 #!/usr/bin/env python3
-from os import environ
+from os import getenv
+from os import path
 from re import fullmatch
 from ruamel.yaml import YAML
 
 
-def get_bot_config():
-    if environ.get("BOT_TOKEN") is None:
-        print("The environment variable BOT_TOKEN must be set!")
-        exit(1)
-    elif fullmatch("^[0-9]*:[a-zA-Z0-9_-]{35}$", environ.get("BOT_TOKEN")) is None:
-        print("The bot token format isn't validated, please check it.")
-        exit(1)
-    elif environ.get("BOT_ADMIN") is None:
-        print("The environment variable BOT_ADMIN must be set!")
-        exit(1)
-    elif fullmatch("^[0-9]*$", environ.get("BOT_ADMIN")) is None:
-        print("The bot admin id format isn't validated, please check it.")
-        exit(1)
+class bcolors:
+    OK = "\033[36m"
+    WARN = "\33[33m"
+    FAIL = "\033[33m"
+    ENDC = "\033[0m"
+
+
+def config_validator(value: str, _type="OTHER") -> bool:
+    if _type == "BOT_TOKEN":
+        if fullmatch("^[0-9]*:[a-zA-Z0-9_-]{35}$", value) is None:
+            return False
+        return True
+    elif _type == "BOT_ADMIN":
+        admins_list = value.split("#")
+        if len(admins_list[0]) == 0:
+            return False
+        else:
+            for id in admins_list:
+                if fullmatch("^[0-9]*$", id) is None:
+                    return False
+            return True
+    elif _type == "PROXY_URL":
+        if fullmatch("^(http|socks5):\/\/.*:\d{1,5}$", value) is None:
+            return False
+        return True
+    elif _type == "MP_GROUP_ID":
+        if fullmatch("^\-[0-9]*$", value) is None:
+            return False
+        return True
+    elif _type == "BOOL_NUM":
+        if fullmatch("^(0|1)$", value) is None:
+            return False
+        return True
+    elif _type == "MESSAGE_NOTICE":
+        if fullmatch("^(normal|silent|mute)$", value.lower()) is None:
+            return False
+        return True
+    elif _type == "OTHER":
+        if len(value) == 0:
+            return False
+        return True
     else:
-        print("The bot token and bot admin id format is validated.")
-        return {
-            "bot_token": environ.get("BOT_TOKEN"),
-            "bot_admin": int(environ.get("BOT_ADMIN")),
-        }
+        return False
 
 
-def get_proxy_config():
-    if environ.get("PROXY_URL") is None:
-        print("You do not use network proxy.")
-        return {}
-    elif fullmatch("^(http|socks5):\/\/.*:\d{1,5}$", environ.get("PROXY_URL")) is None:
-        print("Your proxy url format isn't validated, please check it.")
-        exit(1)
-    elif environ.get("PROXY_USER") is None or environ.get("PROXY_PASS") is None:
+def get_etm_config():
+    etm_config = {}
+    etm_config_flags = {
+        "send_image_as_file": True,
+        "animated_stickers": True,
+        "message_muted_on_slave": "normal",
+        "your_message_on_slave": "silent",
+    }
+
+    bot_token = getenv("BOT_TOKEN", "")
+    bot_admin = getenv("BOT_ADMIN", "")
+    proxy_url = getenv("PROXY_URL", "")
+    proxy_user = getenv("PROXY_USER", "")
+    proxy_pass = getenv("PROXY_PASS", "")
+    mp_group_id = getenv("MP_GROUP_ID", "")
+    send_image_as_file = getenv("SEND_IMAGE_AS_FILE", "")
+    animated_stickers = getenv("ANIMATED_STICKERS", "")
+    message_muted_on_slave = getenv("MESSAGE_MUTED_ON_SLAVE", "")
+    your_message_on_slave = getenv("YOUR_MESSAGE_ON_SLAVE", "")
+
+    if config_validator(bot_token, "BOT_TOKEN"):
+        etm_config["token"] = bot_token
+        print(bcolors.OK + "The bot token check passed." + bcolors.ENDC)
+    else:
         print(
-            "You will use "
-            + environ.get("PROXY_URL")
-            + " as your network proxy, and it don't require authentication."
+            bcolors.FAIL
+            + "The bot token isn't validated, please check it."
+            + bcolors.ENDC
         )
-        return {"proxy_url": environ.get("PROXY_URL")}
-    elif (
-        fullmatch("^(http|socks5):\/\/.*:\d{1,5}$", environ.get("PROXY_URL")).group(1)
-        == "http"
+        exit(1)
+
+    if config_validator(bot_admin, "BOT_ADMIN"):
+        etm_config["admins"] = [int(x) for x in bot_admin.split("#")]
+        print(bcolors.OK + "The bot admin list check passed." + bcolors.ENDC)
+    else:
+        print(
+            bcolors.FAIL
+            + "The bot admin list isn't validated, please check it."
+            + bcolors.ENDC
+        )
+        exit(1)
+
+    if (
+        config_validator(proxy_url, "PROXY_URL")
+        and config_validator(proxy_user)
+        and config_validator(proxy_pass)
     ):
-        print(
-            "You will use "
-            + environ.get("PROXY_URL")
-            + " as your network proxy, and it require authentication."
-        )
-        return {
-            "proxy_url": environ.get("PROXY_URL"),
-            "proxy_user": environ.get("PROXY_USER"),
-            "proxy_pass": environ.get("PROXY_PASS"),
-        }
-    elif (
-        fullmatch("^(http|socks5):\/\/.*:\d{1,5}$", environ.get("PROXY_URL")).group(1)
-        == "socks5"
-    ):
-        print(
-            "You will use "
-            + environ.get("PROXY_URL")
-            + " as your network proxy, and it require authentication."
-        )
-        return {
-            "proxy_url": environ.get("PROXY_URL"),
-            "urllib3_proxy_kwargs": {
-                "proxy_user": environ.get("PROXY_USER"),
-                "proxy_pass": environ.get("PROXY_PASS"),
-            },
-        }
+        proxy_method = fullmatch("^(http|socks5):\/\/.*:\d{1,5}$", proxy_url).group(1)
+        if proxy_method == "http":
+            etm_config["request_kwargs"] = {
+                "proxy_url": proxy_url,
+                "proxy_user": proxy_user,
+                "proxy_pass": proxy_pass,
+            }
+            print(
+                bcolors.OK
+                + "You are using http proxy with authentication."
+                + bcolors.ENDC
+            )
+        elif proxy_method == "socks5":
+            etm_config["request_kwargs"] = {
+                "proxy_url": proxy_url,
+                "urllib3_proxy_kwargs": {
+                    "proxy_user": proxy_user,
+                    "proxy_pass": proxy_pass,
+                },
+            }
+            print(
+                bcolors.OK
+                + "You are using socks5 proxy with authentication."
+                + bcolors.ENDC
+            )
+        else:
+            print(
+                bcolors.FAIL
+                + "The proxy method is "
+                + proxy_method
+                + " and it was unsupported."
+                + bcolors.ENDC
+            )
+            exit(1)
+    elif config_validator(proxy_url, "PROXY_URL"):
+        etm_config["request_kwargs"] = {"proxy_url": proxy_url}
+        print(bcolors.OK + "You are using proxy without authentication." + bcolors.ENDC)
     else:
-        print("Someting wrong!")
+        print(
+            bcolors.WARN
+            + "You don't use any proxy at all, make sure you can access telegram by direct!"
+            + bcolors.ENDC
+        )
+
+    if config_validator(mp_group_id, "MP_GROUP_ID"):
+        print(
+            bcolors.WARN
+            + "All messages from WeChat Official Account will be forward to the Group "
+            + mp_group_id
+            + bcolors.ENDC
+        )
+        etm_config["tg_mp"] = int(mp_group_id)
+    else:
+        print(
+            bcolors.OK
+            + "You message from WeChat Official Account will not be forward to the Group."
+            + bcolors.ENDC
+        )
+
+    if config_validator(send_image_as_file, "BOOL_NUM"):
+        etm_config_flags["send_image_as_file"] = bool(int(send_image_as_file))
+
+    if config_validator(animated_stickers, "BOOL_NUM"):
+        etm_config_flags["animated_stickers"] = bool(int(animated_stickers))
+
+    if config_validator(message_muted_on_slave, "MESSAGE_NOTICE"):
+        etm_config_flags["message_muted_on_slave"] = message_muted_on_slave.lower()
+
+    if config_validator(your_message_on_slave, "MESSAGE_NOTICE"):
+        etm_config_flags["your_message_on_slave"] = your_message_on_slave.lower()
+
+    etm_config["flags"] = etm_config_flags
+    return etm_config
 
 
-def get_mp_telegram_group_id():
-    if environ.get("MP_GROUP_ID") is None:
-        print("You do not use Telegram group to forward WeChat public account message.")
-        return 0
-    elif fullmatch("^\-[0-9]*$", environ.get("MP_GROUP_ID")) is None:
-        print("Your Telegram group id didn't match the rule, please check it.")
-        exit(1)
-    else:
-        print(
-            "You will use a Telegram group that id is "
-            + environ.get("MP_GROUP_ID")
-            + " to forward WeChat public account message."
+def get_efb_patch_config():
+    efb_patch_config = {
+        "auto_mark_as_read": True,
+        "remove_emoji_in_title": True,
+        "strikethrough_recall_msg": True,
+    }
+
+    auto_mark_as_read = getenv("AUTO_MARK_AS_READ", "")
+    remove_emoji_in_title = getenv("REMOVE_EMOJI_IN_TITLE", "")
+    strikethrough_recall_msg = getenv("STRIKETHROUGH_RECALL_MSG", "")
+
+    if config_validator(auto_mark_as_read, "BOOL_NUM"):
+        efb_patch_config["auto_mark_as_read"] = bool(int(auto_mark_as_read))
+
+    if config_validator(remove_emoji_in_title, "BOOL_NUM"):
+        efb_patch_config["remove_emoji_in_title"] = bool(int(remove_emoji_in_title))
+
+    if config_validator(strikethrough_recall_msg, "BOOL_NUM"):
+        efb_patch_config["strikethrough_recall_msg"] = bool(
+            int(strikethrough_recall_msg)
         )
-        return int(environ.get("MP_GROUP_ID"))
+
+    return efb_patch_config
 
 
 def main():
-    file_path = "/home/efb/efb_config/profiles/default/blueset.telegram/config.yaml"
-    bot_config = get_bot_config()
-    proxy_config = get_proxy_config()
-    mp_telegram_group_id = get_mp_telegram_group_id()
+    etm_config = get_etm_config()
+    efb_patch_config = get_efb_patch_config()
+
+    etm_config_path = "efb_config/profiles/default/blueset.telegram/config.yaml"
+    efb_patch_config_path = (
+        "efb_config/profiles/default/patch.PatchMiddleware/config.yaml"
+    )
 
     yaml = YAML()
     yaml.indent(mapping=2, sequence=2, offset=0)
-    with open(file_path) as fo:
-        config = yaml.load(fo)
-    fo.close()
+    with open(path.join(path.dirname(__file__), etm_config_path), "w") as fw_etm_config:
+        yaml.dump(etm_config, fw_etm_config)
 
-    config["token"] = bot_config["bot_token"]
-    config["admins"][0] = bot_config["bot_admin"]
-    config["request_kwargs"] = proxy_config
-
-    if "tg_mp" in config and mp_telegram_group_id >= 0:
-        del config["tg_mp"]
-    elif mp_telegram_group_id < 0:
-        config["tg_mp"] = mp_telegram_group_id
-
-    with open(file_path, "w") as fw:
-        yaml.dump(config, fw)
-    fw.close()
+    with open(
+        path.join(path.dirname(__file__), efb_patch_config_path), "w"
+    ) as fw_efb_patch_config:
+        yaml.dump(efb_patch_config, fw_efb_patch_config)
 
 
 if __name__ == "__main__":

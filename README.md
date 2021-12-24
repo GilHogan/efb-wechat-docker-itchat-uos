@@ -104,9 +104,51 @@ Scan the QR code to log in
 
 > (Optional) Use for roxy authentication
 
+`SEND_IMAGE_AS_FILE`
+
+> (Optional) Set the value to `0` to **disable** send all image messages as files (preventing Telegram’s image compression).
+>
+> _Enabled by default._
+
+`ANIMATED_STICKERS`
+
+> (Optional) Set the value to `0` to **disable** support to animated stickers.
+>
+> _Enabled by default._
+
+`MESSAGE_MUTED_ON_SLAVE`
+
+> (Optional) Behavior when a message received is muted on slave channel platform. Availiable value: `normal`, `silent` and `mute`. Go to [ehForwarderBot/efb-telegram-master](https://github.com/ehForwarderBot/efb-telegram-master#experimental-flags) to get more information.
+>
+> _`normal` is the default value_
+
+`YOUR_MESSAGE_ON_SLAVE`
+
+> (Optional) Behavior when a message received is from you on slave channel platform. Availiable value: `normal`, `silent` and `mute`. Go to [ehForwarderBot/efb-telegram-master](https://github.com/ehForwarderBot/efb-telegram-master#experimental-flags) to get more information.
+>
+> _`silent` is the default value_
+
 `MP_GROUP_ID`
 
-> (Optional) Telegram group id for forwarding every public account message to it. It's a feature of [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware#usage).
+> (Optional) Telegram group id for forwarding every public account message to it. Go to [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware#usage) to get more information.
+
+`AUTO_MARK_AS_READ`
+
+> (Optional) Set the value to `0` to **disable** auto mark as read in wechat phone client. Go to [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware#usage) to get more information.
+>
+> _Enabled by default._
+
+`REMOVE_EMOJI_IN_TITLE`
+
+> (Optional) Set the value to `0` to **disable**  remove emoji in telegram group title. Go to [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware#usage) to get more information.
+>
+> _Enabled by default._
+
+`STRIKETHROUGH_RECALL_MSG`
+
+> (Optional) Set the value to `0` to **disable** strikethrough instead of replying to a recall message. Go to [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware#usage) to get more information.
+>
+> _Enabled by default._
 
 ## FQA
 

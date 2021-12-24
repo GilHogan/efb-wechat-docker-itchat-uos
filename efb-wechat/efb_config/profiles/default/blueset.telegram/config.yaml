@@ -1,14 +1,13 @@
-# [Bot Token]
-token: "token"
-
-# [List of Admin User IDs]
+token: 1234567890:example
 admins:
 - 65536
-
-# [Experimental Flags]
-flags:
-    send_image_as_file: true
-    animated_stickers: true
-
-# [Network Configurations]
 request_kwargs:
+  proxy_url: socks5://example.com:1080
+  urllib3_proxy_kwargs:
+    proxy_user: example
+    proxy_pass: example
+flags:
+  send_image_as_file: true
+  animated_stickers: true
+  message_muted_on_slave: normal
+  your_message_on_slave: silent
