@@ -2,6 +2,6 @@ ehforwarderbot
 efb-telegram-master
 efb-telegram-master[tgs]
 python-telegram-bot[socks]
-efb-wechat-slave
-efb-patch-middleware
+efb-patch-middleware-itchat-uos
 efb-search_msg-middleware
+efb-wechat-slave-itchat-uos
