@@ -15,10 +15,20 @@
 [![docker: image size](https://img.shields.io/docker/image-size/hogangolden/efb-wechat)](https://hub.docker.com/r/hogangolden/efb-wechat)
 
 ## 预览
-|                          微信                          |         telegram          |
-|:----------------------------------------------------:|:-------------------------:|
-| <img alt='1' src="./assets/images/1.jpg"  width=40%> | ![2](assets/images/2.png) |
-| <img alt='3' src="./assets/images/3.jpg"  width=50%> | ![4](assets/images/4.png) |
+<table style="width: 50%;">
+  <tr>
+    <th style="width: 50%;">微信</th>
+    <th style="width: 50%;">telegram</th>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><img alt='1' src="./assets/images/1.jpg"  width=60%></td>
+    <td style="text-align: center;"><img alt='2' src="./assets/images/2.png"  width=100%></td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><img alt='3' src="./assets/images/3.jpg"  width=80%></td>
+    <td style="text-align: center;"><img alt='4' src="./assets/images/4.png"  width=100%></td>
+  </tr>
+</table>
 
 ## 鸣谢
 * [efb-wechat-docker](https://github.com/haukeng/efb-wechat-docker)
