@@ -2,66 +2,53 @@ name: Publish Docker Image
 
 on:
   push:
-    branches: [main]
-  release:
-    types: [published]
-  workflow_dispatch:
+    branches:
+      - "main"
 
 env:
-  DH_IMAGE_NAME: thehaukeng/efb-wechat
-  GH_IMAGE_NAME: haukeng/efb-wechat
+  DH_IMAGE_NAME: hogangolden/efb-wechat
 
 jobs:
   build-and-push-image:
-    name: Push Docker image to Docker Hub and GitHub
+    name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Docker meta
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v4
         with:
+          # list of Docker images to use as base name for tags
           images: |
             ${{ env.DH_IMAGE_NAME }}
-            ghcr.io/${{ env.GH_IMAGE_NAME }}
           labels: |
-            org.opencontainers.image.title=EFB-WeChat
-            org.opencontainers.image.description=EFB Docker image with efb-telegram-master and efb-wechat-slave
+            org.opencontainers.image.title=EFB-WeChat-Telegram
+            org.opencontainers.image.description=EFB Docker image. 将微信中的聊天消息转发到telegram
+          # generate Docker tags based on the following events/attributes
           tags: |
             type=semver,pattern={{version}}
             type=raw,value=latest
-
-      - name: Build and push on main branch
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
         with:
           context: efb-wechat
-          build-args: THREADS=1
           platforms: linux/amd64,linux/386,linux/arm64,linux/arm/v7
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

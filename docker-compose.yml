@@ -1,7 +1,7 @@
 version: '3'
 services:
   efb-wechat:
-    image: thehaukeng/efb-wechat # or use ghcr.io/haukeng/efb-wechat if you hate Docker Hub.
+    image: hogangolden/efb-wechat
     container_name: efb-wechat
     restart: unless-stopped
     environment:
@@ -12,6 +12,6 @@ services:
       # - PROXY_PASS=password # Optional, need when your proxy need authentication.
       # - MP_GROUP_ID=-65536 # Optional, forward every public account message to specific group.
     volumes:
-      - efb-wechat-data:/home/efb/efb_config/profiles/default
+      - ${pwd}/efb-wechat-data:/home/efb/efb_config/profiles/default
 volumes:
   efb-wechat-data:
