@@ -15,7 +15,7 @@
 [![docker: image size](https://img.shields.io/docker/image-size/hogangolden/efb-wechat)](https://hub.docker.com/r/hogangolden/efb-wechat)
 
 ## 预览
-<table style="width: 50%;">
+<table>
   <tr>
     <th style="width: 50%;">微信</th>
     <th style="width: 50%;">telegram</th>
