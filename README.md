@@ -1,9 +1,34 @@
-# efb-wechat-docker
+# efb-wechat-docker-itchat-uos
 
-[![github docker status](https://img.shields.io/github/workflow/status/haukeng/efb-wechat-docker/Publish%20Docker%20Image?label=docker&logo=docker)](https://github.com/haukeng/efb-wechat-docker/actions/workflows/docker-image.yml)
-[![docker: image size](https://img.shields.io/docker/image-size/thehaukeng/efb-wechat)](https://hub.docker.com/r/thehaukeng/efb-wechat)
+将微信中的聊天消息转发到telegram :drooling_face:
 
-EFB Docker image with efb-telegram-master and efb-wechat-slave
+好处:
+- 可以完全关闭手机上的微信应用（禁用android上微信的自启权限，禁止微信后台运行）。android国产rom上如何开启telegram通知[参考]()
+
+**注意:**
+  - **使用该项目，微信有被封禁风险，请自行判断是否使用** [参考1](https://github.com/why2lyj/ItChat-UOS#%E6%9B%B4%E6%96%B0---20230210) [参考2](https://github.com/HoganGolden/efb-wechat-slave-itchat-uos#%E4%BD%BF%E7%94%A8%E5%89%8D%E9%A1%BB%E7%9F%A5)
+  - 如何减少封禁：项目尽量部署在你的本地(本市范围)，如家里的树莓派等。并为该本地的网络环境配置可以访问telegram的代理。代理配置[参考FQA](#FQA)
+
+# docker image
+[![docker: image size](https://img.shields.io/docker/image-size/hogangolden/efb-wechat)](https://hub.docker.com/r/hogangolden/efb-wechat)
+
+## 使用截图
+<img alt='1' src="assets/images/1.jpg" width="24%" style="">
+<img alt='2' src="assets/images/2.png" width="24%" style="">
+<img alt='3' src="assets/images/3.jpg" width="24%" style="">
+<img alt='4' src="assets/images/4.png" width="24%" style="">
+<img alt='5' src="assets/images/5.png" width="50%" style="">
+
+# 鸣谢
+* [efb-wechat-docker](https://github.com/haukeng/efb-wechat-docker)
+* [ehForwarderBot](https://github.com/ehForwarderBot/ehForwarderBot)
+* [ItChat-UOS](https://github.com/why2lyj/ItChat-UOS)
+
+EFB Docker image with:
+* [efb-telegram-master](https://github.com/ehForwarderBot/efb-telegram-master)
+* [efb-wechat-slave-itchat-uos](https://github.com/HoganGolden/efb-patch-middleware-itchat-uos)
+* [efb-patch-middleware-itchat-uos](https://github.com/HoganGolden/efb-wechat-slave-itchat-uos)
+* [efb-search_msg-middleware](https://github.com/ehForwarderBot/efb-search_msg-middleware)
 
 ## Features
 
@@ -11,22 +36,58 @@ EFB Docker image with efb-telegram-master and efb-wechat-slave
 - Support add environment variables `PROXY_URL`, `PROXY_USER`, and `PROXY_PASS` to use proxy for ETM.
 - Integrate [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware) and [efb-search_msg-middleware](https://github.com/ehForwarderBot/efb-search_msg-middleware) by default.
 
+## FQA
+
+### How to use host machine proxy?
+
+Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
+
+* 本人使用[xray](https://github.com/XTLS/Xray-core)客户端做代理，需要配置为：大陆ip和域名直连，外网地址通过代理访问。客户端routing部分的配置参考如下：
+```json
+{
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "domain": [
+          "geosite:cn"
+        ],
+        "enabled": true
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "ip": [
+          "geoip:private",
+          "geoip:cn"
+        ],
+        "enabled": true
+      },
+      {
+        "type": "field",
+        "port": "0-65535",
+        "outboundTag": "proxy",
+        "enabled": true
+      }
+    ]
+  }
+}
+```
 ## Build
 
 ### Use GitHub Action pre-build image
 
 ```shell
-docker pull thehaukeng/efb-wechat
-
-# You can use ghcr.io as well
-# docker pull ghcr.io/haukeng/efb-wechat
+docker pull hogangolden/efb-wechat
 ```
 
 ### Build image manually
 
 ```shell
-git clone https://github.com/haukeng/efb-wechat-docker.git
-cd efb-wechat-docker && docker build -t thehaukeng/efb-wechat efb-wechat
+git clone https://github.com/HoganGolden/efb-wechat-docker-itchat-uos.git
+cd efb-wechat-docker-itchat-uos && docker build -t hogangolden/efb-wechat efb-wechat
 ```
 
 ## Usage
@@ -50,8 +111,8 @@ docker run -d -t \
 --name "efb-wechat" \
 -e BOT_TOKEN=xxxx \
 -e BOT_ADMIN=xxxx \
--v efb-wechat-data:/home/efb/efb_config/profiles/default \
-thehaukeng/efb-wechat
+-v ${pwd}/efb-wechat-data:/home/efb/efb_config/profiles/default \
+hogangolden/efb-wechat
 ```
 
 (**Required**) Use your Telegram Bot Token as `BOT_TOKEN` and your Telegram ID as `BOT_ADMIN`
@@ -60,7 +121,7 @@ thehaukeng/efb-wechat
 
 ```shell
 mkdir efb-wechat && cd efb-wechat
-wget https://git.io/JMR3i -O docker-compose.yml
+wget https://raw.githubusercontent.com/HoganGolden/efb-wechat-docker-itchat-uos/main/docker-compose.yml -O docker-compose.yml
 ```
 
 (**Required**) Modify the environment variables by editing docker-compose.yml, and then:
@@ -68,11 +129,15 @@ wget https://git.io/JMR3i -O docker-compose.yml
 ```shell
 docker-compose up -d
 ```
+raspberry pi os
+```shell
+docker compose up -d
+```
 
 ### Step 2
 
 ```shell
-docker logs -f efb-wechat 
+docker logs --tail=200 -f efb-wechat 
 # Ctrl + C to quit after your log in
 ```
 
@@ -150,8 +215,5 @@ Scan the QR code to log in
 >
 > _Enabled by default._
 
-## FQA
-
-### How to use host machine proxy?
-
-Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
+## LICENSE
+MIT
