@@ -3,7 +3,7 @@
 将微信中的聊天消息转发到telegram :drooling_face:
 
 好处:
-- 可以完全关闭手机上的微信应用（禁用android上微信的自启权限，禁止微信后台运行）。android国产rom上如何开启telegram通知[参考]()
+- 可以完全关闭手机上的微信应用（禁用android上微信的自启权限，禁止微信后台运行）。android国产rom上如何开启telegram通知[参考1](https://www.v2ex.com/t/831069) [参考 2](https://github.com/kooritea/fcmfix)
 
 **注意:**
   - **使用该项目，微信有被封禁风险，请自行判断是否使用** [参考1](https://github.com/why2lyj/ItChat-UOS#%E6%9B%B4%E6%96%B0---20230210) [参考2](https://github.com/HoganGolden/efb-wechat-slave-itchat-uos#%E4%BD%BF%E7%94%A8%E5%89%8D%E9%A1%BB%E7%9F%A5)
@@ -13,11 +13,15 @@
 [![docker: image size](https://img.shields.io/docker/image-size/hogangolden/efb-wechat)](https://hub.docker.com/r/hogangolden/efb-wechat)
 
 ## 使用截图
-<img alt='1' src="assets/images/1.jpg" width="24%" style="">
-<img alt='2' src="assets/images/2.png" width="24%" style="">
-<img alt='3' src="assets/images/3.jpg" width="24%" style="">
-<img alt='4' src="assets/images/4.png" width="24%" style="">
-<img alt='5' src="assets/images/5.png" width="50%" style="">
+```html
+<div style="display:flex;">
+    <img alt='1' src="./assets/images/1.jpg" width="24%" style="">
+    <img alt='2' src="./assets/images/2.png" width="24%" style="">
+    <img alt='3' src="./assets/images/3.jpg" width="24%" style="">
+    <img alt='4' src="./assets/images/4.png" width="24%" style="">
+    <img alt='5' src="./assets/images/5.png" width="50%" style="">
+</div>
+```
 
 # 鸣谢
 * [efb-wechat-docker](https://github.com/haukeng/efb-wechat-docker)
