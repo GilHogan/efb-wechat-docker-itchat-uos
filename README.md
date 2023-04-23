@@ -14,16 +14,15 @@
 
 [![docker: image size](https://img.shields.io/docker/image-size/hogangolden/efb-wechat)](https://hub.docker.com/r/hogangolden/efb-wechat)
 
-## 使用截图
-<img alt='1' src="./assets/images/1.jpg" style="width: 24%">
-<img alt='2' src="./assets/images/2.png" style="width: 24%">
-<img alt='3' src="./assets/images/3.jpg" style="width: 24%">
-<img alt='4' src="./assets/images/4.png" style="width: 24%">
-<img alt='5' src="./assets/images/5.png" style="width: 50%">
+## 预览
+|                          微信                          |         telegram          |
+|:----------------------------------------------------:|:-------------------------:|
+| <img alt='1' src="./assets/images/1.jpg"  width=40%> | ![2](assets/images/2.png) |
+| <img alt='3' src="./assets/images/3.jpg"  width=50%> | ![4](assets/images/4.png) |
 
-# 鸣谢
+## 鸣谢
 * [efb-wechat-docker](https://github.com/haukeng/efb-wechat-docker)
-* [ehForwarderBot](https://github.com/ehForwarderBot/ehForwarderBot)
+* [ehForwarderBot](https://github.com/ehForwarderBot)
 * [ItChat-UOS](https://github.com/why2lyj/ItChat-UOS)
 
 EFB Docker image with:
@@ -38,45 +37,6 @@ EFB Docker image with:
 - Support add environment variables `PROXY_URL`, `PROXY_USER`, and `PROXY_PASS` to use proxy for ETM.
 - Integrate [efb-patch-middleware-itchat-uos](https://github.com/HoganGolden/efb-wechat-slave-itchat-uos) and [efb-search_msg-middleware](https://github.com/ehForwarderBot/efb-search_msg-middleware) by default.
 
-## FQA
-
-### How to use host machine proxy?
-
-Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
-
-* 本人使用[xray](https://github.com/XTLS/Xray-core)客户端做代理，需要配置为：大陆ip和域名直连，外网地址通过代理访问。客户端routing部分的配置参考如下：
-```json
-{
-  "routing": {
-    "domainStrategy": "IPIfNonMatch",
-    "rules": [
-      {
-        "type": "field",
-        "outboundTag": "direct",
-        "domain": [
-          "geosite:cn"
-        ],
-        "enabled": true
-      },
-      {
-        "type": "field",
-        "outboundTag": "direct",
-        "ip": [
-          "geoip:private",
-          "geoip:cn"
-        ],
-        "enabled": true
-      },
-      {
-        "type": "field",
-        "port": "0-65535",
-        "outboundTag": "proxy",
-        "enabled": true
-      }
-    ]
-  }
-}
-```
 ## Build
 
 ### Use GitHub Action pre-build image
@@ -216,6 +176,62 @@ Scan the QR code to log in
 > (Optional) Set the value to `0` to **disable** strikethrough instead of replying to a recall message. Go to [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware#usage) to get more information.
 >
 > _Enabled by default._
+
+## FQA
+
+### How to use host machine proxy?
+
+Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
+
+* 本人使用[xray](https://github.com/XTLS/Xray-core)客户端做代理，需要配置为：大陆ip和域名直连，外网地址通过代理访问。客户端routing部分的配置参考如下：
+```json
+{
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "domain": [
+          "geosite:cn"
+        ],
+        "enabled": true
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "ip": [
+          "geoip:private",
+          "geoip:cn"
+        ],
+        "enabled": true
+      },
+      {
+        "type": "field",
+        "port": "0-65535",
+        "outboundTag": "proxy",
+        "enabled": true
+      }
+    ]
+  }
+}
+```
+
+## [EFB 框架及各组件常见问题](https://github.com/ehForwarderBot/efb-wechat-slave/wiki/EFB%E2%80%86%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%90%84%E7%BB%84%E4%BB%B6%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+
+## [efb-telegram-master usage](https://github.com/ehforwarderbot/efb-telegram-master/#usage)
+ETM offers the following commands, you can also send it
+to BotFather for a command list::
+
+    help - Show commands list.
+    link - Link a remote chat to a group.
+    unlink_all - Unlink all remote chats from a group.
+    info - Display information of the current Telegram chat.
+    chat - Generate a chat head.
+    extra - Access additional features from Slave Channels.
+    update_info - Update info of linked Telegram group.
+    react - Send a reaction to a message, or show a list of reactors.
+    rm - Remove a message from its remote chat.
 
 ## LICENSE
 MIT
