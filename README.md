@@ -73,7 +73,7 @@ docker run -d -t \
 --name "efb-wechat" \
 -e BOT_TOKEN=xxxx \
 -e BOT_ADMIN=xxxx \
--v $(pwd)/efb-wechat-data:/home/efb/efb_config/profiles/default \
+-v efb-wechat-data:/home/efb/efb_config/profiles/default \
 hogangolden/efb-wechat
 ```
 
