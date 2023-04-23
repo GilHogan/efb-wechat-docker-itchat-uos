@@ -10,18 +10,16 @@
   - 如何减少封禁：项目尽量部署在你的本地(本市范围)，如家里的树莓派等。并为该本地的网络环境配置可以访问telegram的代理。代理配置[参考FQA](#FQA)
 
 # docker image
+点击下面图标，跳转到docker hub 
+
 [![docker: image size](https://img.shields.io/docker/image-size/hogangolden/efb-wechat)](https://hub.docker.com/r/hogangolden/efb-wechat)
 
 ## 使用截图
-```html
-<div style="display:flex;">
-    <img alt='1' src="./assets/images/1.jpg" width="24%" style="">
-    <img alt='2' src="./assets/images/2.png" width="24%" style="">
-    <img alt='3' src="./assets/images/3.jpg" width="24%" style="">
-    <img alt='4' src="./assets/images/4.png" width="24%" style="">
-    <img alt='5' src="./assets/images/5.png" width="50%" style="">
-</div>
-```
+<img alt='1' src="./assets/images/1.jpg" style="width: 24%">
+<img alt='2' src="./assets/images/2.png" style="width: 24%">
+<img alt='3' src="./assets/images/3.jpg" style="width: 24%">
+<img alt='4' src="./assets/images/4.png" style="width: 24%">
+<img alt='5' src="./assets/images/5.png" style="width: 50%">
 
 # 鸣谢
 * [efb-wechat-docker](https://github.com/haukeng/efb-wechat-docker)
@@ -30,15 +28,15 @@
 
 EFB Docker image with:
 * [efb-telegram-master](https://github.com/ehForwarderBot/efb-telegram-master)
-* [efb-wechat-slave-itchat-uos](https://github.com/HoganGolden/efb-patch-middleware-itchat-uos)
-* [efb-patch-middleware-itchat-uos](https://github.com/HoganGolden/efb-wechat-slave-itchat-uos)
+* [efb-wechat-slave-itchat-uos](https://github.com/HoganGolden/efb-wechat-slave-itchat-uos)
+* [efb-patch-middleware-itchat-uos](https://github.com/HoganGolden/efb-patch-middleware-itchat-uos)
 * [efb-search_msg-middleware](https://github.com/ehForwarderBot/efb-search_msg-middleware)
 
 ## Features
 
 - Container run by non-root user.
 - Support add environment variables `PROXY_URL`, `PROXY_USER`, and `PROXY_PASS` to use proxy for ETM.
-- Integrate [efb-patch-middleware](https://github.com/ehForwarderBot/efb-patch-middleware) and [efb-search_msg-middleware](https://github.com/ehForwarderBot/efb-search_msg-middleware) by default.
+- Integrate [efb-patch-middleware-itchat-uos](https://github.com/HoganGolden/efb-wechat-slave-itchat-uos) and [efb-search_msg-middleware](https://github.com/ehForwarderBot/efb-search_msg-middleware) by default.
 
 ## FQA
 
@@ -115,7 +113,7 @@ docker run -d -t \
 --name "efb-wechat" \
 -e BOT_TOKEN=xxxx \
 -e BOT_ADMIN=xxxx \
--v ${pwd}/efb-wechat-data:/home/efb/efb_config/profiles/default \
+-v $(pwd)/efb-wechat-data:/home/efb/efb_config/profiles/default \
 hogangolden/efb-wechat
 ```
 
