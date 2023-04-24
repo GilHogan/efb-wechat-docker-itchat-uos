@@ -14,12 +14,6 @@
 
 [![docker: image size](https://img.shields.io/docker/image-size/hogangolden/efb-wechat)](https://hub.docker.com/r/hogangolden/efb-wechat)
 
-## 预览
-|                          微信                          |                       telegram                       |
-|:----------------------------------------------------:|:----------------------------------------------------:|
-| <img alt='1' src="./assets/images/1.jpg"  width=300> | <img alt='2' src="./assets/images/2.png"  width=300> |
-| <img alt='3' src="./assets/images/3.jpg"  width=300> | <img alt='4' src="./assets/images/4.png"  width=300> |
-
 ## 鸣谢
 * [efb-wechat-docker](https://github.com/haukeng/efb-wechat-docker)
 * [ehForwarderBot](https://github.com/ehForwarderBot)
@@ -193,9 +187,9 @@ Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
         "type": "field",
         "outboundTag": "direct",
         "domain": [
-          "geosite:cn"
-        ],
-        "enabled": true
+          "geosite:cn",
+          "geosite:private"
+        ]
       },
       {
         "type": "field",
@@ -203,14 +197,7 @@ Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
         "ip": [
           "geoip:private",
           "geoip:cn"
-        ],
-        "enabled": true
-      },
-      {
-        "type": "field",
-        "port": "0-65535",
-        "outboundTag": "proxy",
-        "enabled": true
+        ]
       }
     ]
   }
