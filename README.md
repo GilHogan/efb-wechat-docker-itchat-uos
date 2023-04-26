@@ -181,7 +181,7 @@ Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
 ```json
 {
   "routing": {
-    "domainStrategy": "AsIs",
+    "domainStrategy": "IPIfNonMatch",
     "rules": [
       {
         "type": "field",
