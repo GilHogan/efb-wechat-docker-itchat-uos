@@ -99,6 +99,22 @@ docker logs --tail=200 -f efb-wechat
 
 Scan the QR code to log in
 
+## Telegram 上机器人的设置
+* 允许 Bot 读取非指令信息，对 @botfather 说话: /setprivacy, 选择disable
+* 允许将 Bot 添加进群组，对 @botfather 说话: /setjoingroups, 选择enable
+* 允许 Bot 提供指令列表，对 @botfather 说话: /setcommands, 输入以下内容 （复制以下内容一次性发给botfather）
+
+
+    help - Show commands list.
+    link - Link a remote chat to a group.
+    unlink_all - Unlink all remote chats from a group.
+    info - Display information of the current Telegram chat.
+    chat - Generate a chat head.
+    extra - Access additional features from Slave Channels.
+    update_info - Update info of linked Telegram group.
+    react - Send a reaction to a message, or show a list of reactors.
+    rm - Remove a message from its remote chat.
+
 ## Configuration Options
 
 `BOT_TOKEN`
@@ -205,20 +221,6 @@ Try to set `PROXY_URL` as `http://172.17.0.1:YOUR_PORT` (Socks5 works as well)
 ```
 
 ## [EFB 框架及各组件常见问题](https://github.com/ehForwarderBot/efb-wechat-slave/wiki/EFB%E2%80%86%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%90%84%E7%BB%84%E4%BB%B6%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
-
-## [efb-telegram-master usage](https://github.com/ehforwarderbot/efb-telegram-master/#usage)
-ETM offers the following commands, you can also send it
-to BotFather for a command list::
-
-    help - Show commands list.
-    link - Link a remote chat to a group.
-    unlink_all - Unlink all remote chats from a group.
-    info - Display information of the current Telegram chat.
-    chat - Generate a chat head.
-    extra - Access additional features from Slave Channels.
-    update_info - Update info of linked Telegram group.
-    react - Send a reaction to a message, or show a list of reactors.
-    rm - Remove a message from its remote chat.
 
 ## LICENSE
 MIT
